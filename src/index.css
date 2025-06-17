@@ -1,0 +1,7 @@
+html{
+  background-image: url(https://marketplace.canva.com/EAFm9cdFi94/2/0/1600w/canva-bright-cartoon-green-and-brown-school-books-pattern-desktop-wallpaper-4Iwc1WA2mcM.jpg);
+  background-size: cover;        /* Makes the image cover the whole area */
+  background-repeat: no-repeat;  /* Prevents the image from repeating */
+  background-position: center;
+  height: 100%;  /* Centers the image */
+}

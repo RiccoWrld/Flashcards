@@ -1,0 +1,38 @@
+.Flashcards{
+  text-align: center;
+  font-family: Comic Sans MS;
+  color: black;
+}
+
+.FlashcardBtn{
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  gap: 10px;
+  
+  
+}
+
+.FlashCardQuestion {
+ border: 2px gray solid;
+ width: 625px;
+ height: 325px;
+ font-family: Comic Sans MS;
+ font-size: 18px;
+}
+
+
+.Next{
+  border-radius: 10px;
+  padding: 5px;
+  background-color: white;
+  color: sienna;
+}
+
+.Previous{
+  border-radius: 10px;
+  padding: 5px;
+  background-color: white;
+  color: sienna;
+  
+}
