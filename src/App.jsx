@@ -6,7 +6,7 @@ export default function Display() {
   const [currentFlashcard, setCurrentFlashcard] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
 
-  let flashcard = flashcardList[currentFlashcard];
+  const flashcard = flashcardList[currentFlashcard];
 
   if (!flashcard) {
     return <div>No flashcard found at this position.</div>;
@@ -32,9 +32,16 @@ export default function Display() {
       <h4><b>These general knowledge flashcards feature simple, beginner-friendly questions and answers to help reinforce basic facts across a variety of subjects.</b></h4>
       <h4><b>Number of Flashcards: {flashcardList.length}</b></h4>
 
-      <button className="FlashCardQuestion" onClick={handleToggleClick}>
-        {showAnswer ? flashcard.answer : flashcard.question}
-      </button>
+      <div className="FlashcardContainer" onClick={handleToggleClick}>
+        <div className={`FlashcardInner ${showAnswer ? "show-back" : ""}`}>
+          <div className="FlashcardFront">
+            {flashcard.question}
+          </div>
+          <div className="FlashcardBack">
+            {flashcard.answer}
+          </div>
+        </div>
+      </div>
 
       <div className="FlashcardBtn">
         <button className="Previous" onClick={handlePreviousClick}><b>Previous</b></button>
