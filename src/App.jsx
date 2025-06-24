@@ -1,51 +1,99 @@
 import { flashcardList } from "./data.js";
-import { useState } from "react"; 
-import './App.css';
+import { useState } from "react";
+import "./App.css";
 
 export default function Display() {
   const [currentFlashcard, setCurrentFlashcard] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [userGuess, setUserGuess] = useState("");
+  const [feedback, setFeedback] = useState("");
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const flashcard = flashcardList[currentFlashcard];
 
-  if (!flashcard) {
-    return <div>No flashcard found at this position.</div>;
+  function resetCard() {
+    setShowAnswer(false);
+    setUserGuess("");
+    setFeedback("");
   }
 
-  function handlePreviousClick() {
-    setCurrentFlashcard(prev => Math.max(prev - 1, 0));
-    setShowAnswer(false);
+  function changeCard(newIndex) {
+    setIsTransitioning(true); // start hiding
+    resetCard();
+
+    // Small delay to let state update before showing new card
+    setTimeout(() => {
+      setCurrentFlashcard(newIndex);
+      setIsTransitioning(false); // show new card
+    }, 100); // 100ms delay
   }
 
   function handleNextClick() {
-    setCurrentFlashcard(prev => Math.min(prev + 1, flashcardList.length - 1));
-    setShowAnswer(false);
+    if (currentFlashcard < flashcardList.length - 1) {
+      changeCard(currentFlashcard + 1);
+    }
   }
 
-  function handleToggleClick() {
-    setShowAnswer(prev => !prev);
+  function handlePreviousClick() {
+    if (currentFlashcard > 0) {
+      changeCard(currentFlashcard - 1);
+    }
+  }
+
+  function handleSubmit() {
+    if (userGuess.trim().toLowerCase() === flashcard.answer.toLowerCase()) {
+      setFeedback("correct");
+      setShowAnswer(true);
+    } else {
+      setFeedback("incorrect");
+    }
   }
 
   return (
     <div className="Flashcards">
       <h1><b>General Knowledge Flashcards</b></h1>
-      <h4><b>These general knowledge flashcards feature simple, beginner-friendly questions and answers to help reinforce basic facts across a variety of subjects.</b></h4>
       <h4><b>Number of Flashcards: {flashcardList.length}</b></h4>
 
-      <div className="FlashcardContainer" onClick={handleToggleClick}>
-        <div className={`FlashcardInner ${showAnswer ? "show-back" : ""}`}>
-          <div className="FlashcardFront">
-            {flashcard.question}
+      <div className="FlashcardContainer">
+        {!isTransitioning && (
+          <div className={`FlashcardInner ${showAnswer ? "show-back" : ""}`}>
+            <div className="FlashcardFront">
+              {flashcard.question}
+            </div>
+            <div className={`FlashcardBack ${feedback}`}>
+              {flashcard.answer}
+            </div>
           </div>
-          <div className="FlashcardBack">
-            {flashcard.answer}
-          </div>
-        </div>
+        )}
+      </div>
+
+      <div className="InputSection">
+        <input
+          type="text"
+          value={userGuess}
+          onChange={(e) => setUserGuess(e.target.value)}
+          placeholder="Enter your guess"
+        />
+        <button className="Submit" onClick={handleSubmit}>Submit</button>
+        {feedback === "correct" && <p className="Feedback correct">Correct!</p>}
+        {feedback === "incorrect" && <p className="Feedback incorrect">Incorrect. Try again!</p>}
       </div>
 
       <div className="FlashcardBtn">
-        <button className="Previous" onClick={handlePreviousClick}><b>Previous</b></button>
-        <button className="Next" onClick={handleNextClick}><b>Next</b></button>
+        <button
+          className="Previous"
+          onClick={handlePreviousClick}
+          disabled={currentFlashcard === 0}
+        >
+          <b>Previous</b>
+        </button>
+        <button
+          className="Next"
+          onClick={handleNextClick}
+          disabled={currentFlashcard === flashcardList.length - 1}
+        >
+          <b>Next</b>
+        </button>
       </div>
     </div>
   );
